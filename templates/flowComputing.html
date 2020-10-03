@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Valve Sizing Calculator</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/styles.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src={{ url_for('static', filename='../static/js/flowComputing.js')}}></script> -->
+
+
+  </head>
+ <!-- <body id="body" style="background-color: rgba(110, 120, 138, 0.438);"> -->
+  <body id="body">
+  <!-- <header>
+
+<nav class="navbar navbar-light bg-light">
+  <a class="navbar-brand" href="#" >
+    <img src="../static/docs/valve.png" width="80" height="80" class="d-inline-block align-center" alt="" loading="lazy">
+    Flow Valve Computations - 
+    <small class="navbar-text">Parameters and Computing for Valve Modeling</small>
+  </a>
+</nav>
+  
+  </header>
+ -->
+ <form id="first" method="POST"  >
+ <div class="container-fluid">
+<div class="row">
+      <div class="col-lg-1 col-sm-12" style="background-color: black">
+        <br>
+        <br>
+        <img src="../static/docs/company_logo.png" width="90" height="40" class="d-inline-block align-center" alt="" loading="lazy">
+        
+      </div>
+
+    
+      <!-- <form id="first" class="needs-validation" method="POST"  > -->
+      <div class="col-lg-7 col-md-9 col-sm-12">
+        <br>
+         <!--  **************   Client & Eng  data -->
+         <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><h6>Customer & Header Info</h6></li>
+          </ol>
+        </nav>
+         <div class="row">
+          <div class="container-fluid input_box">
+                <div class="row">
+                    <div class="col-3">
+                      <small for="customer">Customer</small>
+                      <input type="text" class="form-control form-control-sm input_max" id="customer" required>
+                      <br>
+                    </div>
+
+                    <div class="col-2">
+                      <small for="customer">Tag</small>
+                      <input type="text" class="form-control form-control-sm input_max" id="tag" required>
+                    </div>
+
+                    <div class="col-3">
+                        <small for="customer">Engineer</small>
+                        <input type="text" class="form-control form-control-sm input_max" id="engineer" required>
+                    </div>
+                </div>
+          </div>
+
+        </div>  <!-- End CLient & Eng data input col  -->
+        <br>
+        <!--  **************   Pipe data -->
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><h6>Pipe Data & Fluid Specs</h6></li>
+          </ol>
+        </nav>
+        <div class="row">
+        <!-- <div class="form-group col-md-12"> -->
+          <div class="container-fluid input_box">
+          <div class="row">
+                <div class="col-2">
+                  <small for="inputState">NPS(in) In / Out</small>
+                  <select id="inletD" class="form-control">
+                    <option selected></option>
+                    {% for o in pipe_info %}
+                    <option value="{{pipe_OD[o]}}">{{pipe_info[o]}}</option>
+                    {% endfor %}
+                  </select>
+                  <!-- <label id="pipe_unit" val="in" for="inputState">NPS(in) Out</label> -->
+                  <select id="outletD" class="form-control">
+                    <option selected></option>
+                    {% for o in pipe_info %}
+                    <option value="{{pipe_OD[o]}}">{{pipe_info[o]}}</option>         
+                    {% endfor %}
+                  </select>
+                  
+                  <small id="ODin" disabled hidden></small>
+                </div>
+              
+                <div class="col-3">
+                    <small for="inputState">Schedule</small>
+                    <br>
+                    <select id="schInlet" class="form-control">
+                      <option selected></option>
+                    </select>
+                    
+                    <!-- <label for="inputState">Schedule</label> -->
+                    <select id="schOutlet" class="form-control">
+                      <option selected></option>
+                    </select>
+                      
+                    <small id="wallThick_in" disabled hidden></small>
+                </div>
+
+            <div class="col-1">   <!-- Empty Col for proper spacing-->
+            </div>  
+            
+            <div class="col-2">
+              <small for="inputState">Fluid Type</small>
+              <select id="fluid_type" class="form-control form-control-sm">
+                <option selected value="liquid">Liquid</option>
+                <option value="gas" disabled>Gas</option>
+                <option value="steam" disabled>Steam</option>
+                <option value="steam" disabled>Two-Phase</option>
+              </select>
+
+            </div>
+
+            <div class="col-4">
+              <small for="inputState">Fluid Name</small>
+              <select id="liquid" class="form-control form-control-sm">
+                <option selected></option>
+                <option value="water">Water</option>
+                <option value='propane'>Propane</option>
+                <option value="ethanol">Ethanol</option>
+                <option role="separator" class="dropdown-divider">---------</option>
+                <option value="ethanol">Nuevo Grupo</option>
+              </select>
+              <small id="LiquidHelp" class="form-text text-muted">While selecting proper fluid, density, vapor pressure, critical pressure and viscosity will be calculated based on process data</small>
+            
+              <br>
+            </div>
+          </div>  <!-- End Row Section -->
+        </div>
+        </div> <!-- End Pipe data input col  -->
+        <br>
+        <!--  **************   Process data -->
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><h6>Process Data</h6></li>
+          </ol>
+        </nav>
+        <div class="row">
+             
+          <div class="container-fluid input_box">
+            <div class="row">
+              <div class="col-2">
+                <small for="units" >Units</small>
+              </div>
+              <div class="col-2"></div>
+              <div class="col-2">
+                <small for="flow" >(Operat)</small>
+              </div>
+              <div class="col-2">
+                <input type="checkbox"  class="form-check-input" id="CheckMin" >
+                <small for="flow">(Min)</small>
+              </div>
+              <div class="col-2">
+                <input type="checkbox"  class="form-check-input" id="CheckMax">
+                <small for="flow">(Max)</small>
+              </div>
+              <!-- logical TO-DO for Other input if neccesary-->
+            </div>
+
+            <div class="row">
+              <div class="col-2"> 
+                <select id="flow_unit" class="form-control form-control-sm">
+                  <option selected></option>
+                  <option value="gpm" selected>gpm</option>
+                  <option value="m3_hr">m3 / hr</option>
+                  <option value="ton_hr">ton / hr</option>
+                  <option value="ft3_hr">ft3 / hr</option>
+                  <option value="m3_seg">m3 / seg</option>
+                </select>
+              </div>
+              <div class="col-2"> 
+                <small for="flow" >Flow</small> <br>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm" id="flow_Op" required>
+              </div>
+              <div class="col-2">
+                <input type="float" class="form-control form-control-sm input_min" id="flow_Min" disabled="disabled" required>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm input_max" id="flow_Max"  disabled="disabled" required>
+              </div>
+              <!-- logical TO-DO for Other input if neccesary-->
+            </div>
+
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-2">
+                <small for="P1">Inlet P</small>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm" id="P1_Op" required>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm input_min" id="P1_Min" disabled="disabled" required>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm input_max" id="P1_Max" disabled="disabled" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-2">
+                <select id="press_unit" class="form-control form-control-sm">
+                  <option selected></option>
+                  <option value="psi" selected>psi</option>
+                  <option value="psig">psig</option>
+                  <option value="bar">bar</option>
+                  <option value="kPascal">kPascal</option>
+                  <option value="Pascal">Pascal</option>
+                </select>
+              </div>
+              <div class="col-2">
+                <input type="radio"  class="form-check-input" id="radio_P2" value="in_Outlet" name="Pdrop" checked=true>
+                <small for="P2">Outlet P</small>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm" id="P2_Op" required >
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm input_min" id="P2_Min" disabled="disabled" required>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm input_max" id="P2_Max" disabled="disabled" required>
+              </div>
+              <!-- logical TO-DO for Other input if neccesary-->
+            </div>
+
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-2">
+                <input type="radio"  class="form-check-input" id="radio_deltaP" value="in_deltaP" name="Pdrop" >
+                <small for="deltaP">P Drop</small>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm" id="deltaP_Op" required disabled="disabled">
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm input_min" id="deltaP_Min" disabled="disabled" required>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm input_max" id="deltaP_Max" disabled="disabled" required>
+              </div>
+              <!-- logical TO-DO for Other input if neccesary-->
+            </div>
+
+            <div class="row">
+              <div class="col-2">
+                <select id="temp_unit" class="form-control form-control-sm">
+                  <option selected></option>
+                  <option value="C">C</option>
+                  <option value="F" selected>F</option>
+                  <option value="K">K</option>
+                </select>
+              </div>
+              <div class="col-2">
+                <small for="temp">Temperature</small>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm" id="temp_Op" required >
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm input_min" id="temp_Min" disabled="disabled" required>
+              </div>
+              <div class="col-2">
+                <input type="number" class="form-control form-control-sm input_max" id="temp_Max" disabled="disabled" required>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-2">
+                <br>
+                <button id="compute" type="submit" class="btn btn-primary" data-dismiss ="alert">Compute</button>
+              </div>
+              <div class="col-2">
+                <br>
+                <div class="alert alert-dark" role="alert" id="procces_result_show" hidden>
+                  <h6 class="alert-heading" id="CV_required_show">req Cv:</h6>
+                  <hr>
+                  <small id="cavIx_show" class="form-text text-muted" >sigma :</small>
+                  <br>
+                  <hr>
+                  <small id="Gf_show">Gf | viscosity (cp) | criticalP | vaporP (psi a) </small>
+                                   
+                </div>
+              </div>
+              <div class="col-2">
+                <br>
+                <div class="alert alert-dark" role="alert" id="Op_results_show" hidden>
+                  <h6 class="alert-heading" id="ResultOp"></h6>
+                  <hr>
+                  <small id="cavIndexOp" class="form-text text-muted" ></small>
+                  <hr>
+                  <small id="liqPropOp">   </small>
+                  <br>
+                </div>
+              </div>
+              <div class="col-2">
+                <br>
+                <div class="alert alert-dark" role="alert" id="Min_results_show" hidden>
+                  <h6 class="alert-heading" id="ResultMin"></h6>
+                  <hr>
+                  <small id="cavIndexMin" class="form-text text-muted" ></small>
+                  <hr>
+                  <small id="liqPropMin">   </small>
+                  <br>
+                </div>
+              </div>
+              <div class="col-2">
+                <br>
+                <div class="alert alert-dark" role="alert" id="Max_results_show" hidden>
+                  <h6 class="alert-heading" id="ResultMax"></h6>
+                  <hr>
+                  <small id="cavIndexMax" class="form-text text-muted" ></small>
+                  <hr>
+                  <small id="liqPropMax">   </small>
+                  <br>
+                </div>
+              </div>
+            </div> 
+          </div>  <!-- End container for Process Data -->
+        </div>   <!--End col-7 main grid -->
+         <!-- End Process data input col-->
+
+        <!-- *********************  Results Data Display (Table & Graph)-->
+        <br>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <br>
+            <li class="breadcrumb-item active" aria-current="page"><h6>Results</h6></li>
+          </ol>
+        </nav>
+          <div class="row">
+            <div class="container-fluid input_box">
+          <div class="row">
+            <br>
+            <div id="table_results" class="col-sm">
+              <table class="table">
+                <caption>Process Data</caption>
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Operational
+                    </th>
+                    <th scope="col">Min
+                    </th>
+                    <th scope="col">Max
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Cv</th>
+                    <td id="reqCv_Op">-</td>
+                    <td id="reqCv_Min">-</td>
+                    <td id="reqCv_Max">-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">% Travel</th>
+                    <td id='travelOp'>-</td>
+                    <td id='travelMin'>-</td>
+                    <td id='travelMax'>-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">% Cv</th>
+                    <td id='percentageCvOp' >-</td>
+                    <td id='percentageCvMin'>-</td>
+                    <td id='percentageCvMax'>-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">FL</th>
+                    <td id='FLOp' >-</td>
+                    <td id='FLMin'>-</td>
+                    <td id='FLMax'>-</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">critical FL</th>
+                    <td id='FL_PvcOp'>-</td>
+                    <td id='FL_PvcMin'>-</td>
+                    <td id='FL_PvcMax'>-</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-sm centered">
+              <img id='image' src="../static/docs/grafico.png" class="img-fluid rounded  " alt="Responsive image" hidden>
+              <!-- <img id='image' src="../static/docs/Spinner-0.7s-200px.gif" class="img-fluid rounded" alt="Responsive image" hidden> -->
+            </div>
+            
+          </div> <!-- End Row Section for Results-->
+        </div>
+        </div>  <!-- End Results data show (no input here)-->
+
+      </div>
+       <!-- End Main Form - Group-->
+      <!-- End Container  -->
+
+    <div class="col-lg-2 col-md-3 col-sm-12">
+      <br>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active" aria-current="page"><h6>Valve Selection</h6></li>
+        </ol>
+      </nav>
+      <div class="form-row input_box" >
+
+      <div class="col-3">
+        <br>
+        <small for="inputState">Valve Series</small>
+      </div>
+      <div class="col-9">
+        <br>
+         <select id="valve_model" class="form-control form-control-sm">
+             <option disabled selected>Select Valve</option>
+
+             {% for o in data %}
+             <option value="{{o.value}}">{{o.name}}</option>
+             {% endfor %}
+
+         </select>
+        </div>
+
+        
+        <div class="col-3">
+          <br>
+         <small for="inputState">Valve Size</small>
+        </div>
+        <div class="col-9">
+          <br>
+         <select id="valve_size" class="form-control form-control-sm">
+         <option disabled selected>Select Valve</option>
+         </select>  
+         </div>
+
+         
+         <div class="col-3">
+           <br>
+         <small id="ratedCv_label" for="inputState" hidden>Rated Cv</small>
+        </div>
+        <div class="col-9">
+          <br>
+         <select id="ratedCv" class="form-control form-control-sm" hidden>
+             <option disabled selected>Select Rated Cv</option>
+         </select>
+        </div>
+
+        <div class="col-3">
+          <br>
+         <small for="inputState">Trim Size</small>
+        </div>
+        <div class="col-9">
+          <br>
+         <select id="trim_size" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+        </div>
+
+
+        <div class="col-3">
+          <br>
+         <small for="inputState">Trim Type</small>
+        </div>
+        <div class="col-9">
+          <br>
+         <select id="trim_type" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+        </div>
+
+        <div class="col-3">
+          <br>
+         <small for="inputState">Flow Chart</small>
+         </div>
+         <div class="col-9">
+          <br>
+         <select id="flow_chart" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+        </div>
+
+        <div class="col-3">
+          <br>
+         <small for="inputState">Flow Direction</small>
+         </div>
+         <div class="col-9">
+          <br>
+         <select id="flow_direction" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+         </div>
+
+        <div class="col-3">
+          <br>
+         <small for="inputState">Bonnet Type</small>
+         </div>
+         <div class="col-9">
+          <br>
+         <select id="bonnet_type" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+         </div>
+
+         <div class="col-3">
+          <br>
+         <small for="inputState">Plug Type</small>
+         </div>
+         <div class="col-9">
+          <br>
+         <select id="plug_type" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+         </div>
+
+         <div class="col-3">
+          <br>
+         <small for="inputState">Plug Material</small>
+         </div>
+         <div class="col-9">
+          <br>
+         <select id="plug_material" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+        </div>
+
+        <div class="col-3">
+          <br>
+         <small for="inputState">Cage Type</small>
+         </div>
+         <div class="col-9">
+          <br>
+         <select id="cage_type" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+         </div>
+
+         <div class="col-3">
+          <br>
+         <small for="inputState">Cage Mat</small>
+         </div>
+         <div class="col-9">
+          <br>
+         <select id="cage_material" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+         </div>
+
+         <div class="col-3">
+          <br>
+         <small for="inputState">Seat Mat</small>
+         </div>
+         <div class="col-9">
+          <br>
+         <select id="seat_material" class="form-control form-control-sm">
+         <option disabled selected>Select</option>
+         </select>
+         <br>
+         </div>
+
+        <br>
+        
+      </div>   
+      <!-- final row section -->
+      <br>
+        <br>
+           <button id="valve_sizing" type="submit_other" class="btn btn-primary align-center" data-dismiss ="alert" hidden>Apply Valve Sizing</button>
+    </div>
+
+  
+
+     <div class="col-lg-2 input_box">
+      <br>
+      <br>
+      <br>
+      <img src="../static/docs/valve_image.jpg" width="200" height="450" class="centered" alt="" loading="lazy">
+    </div>
+  </div>
+
+  </div>  <!-- end outer grid row-->
+  </div>  <!-- end outer container  -->
+  
+</form>
+  </body>
+  <footer>
+     <nav class="navbar navbar-light" style="background-color: #595c5c;">
+      <img src="../static/docs/coati.jpg" width="60" height="60" class="d-inline-block align-rigth" alt="" loading="lazy">
+      <h5 class="align-left" > © Developed by germanbarboza@gmail.com - 2020 </h5>
+      <h6 class="d-inline-block align-left">
+      All calculations based on ISA-75.01.01-2007 (60534-2-1 Mod) <br>
+      Flow Equations for Sizing Control Valves </h6>
+    </nav>
+  </footer>
+            
+            <!-- jQuery (Bootstrap JS plugins depend on it) -->
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="../static/js/bootstrap.min.js"></script>
+  <script src="../static/js/bootstrap.js"></script>
+  <script src="../static/js/script.js"></script>
+  <script src="../static/js/bootstrap.bundle.js"></script>
+  <script src="../static/js/jquery-3.5.1.slim.min.js"></script>
+  <script src="../static/js/flowComputing.js"></script>
+
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script> -->
+
+</body>
+
+</html>
