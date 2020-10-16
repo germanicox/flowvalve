@@ -1,0 +1,11 @@
+/* especial requirements for design from SmartPower  */
+/* main styles from bootstrap 4 */
+
+body {
+    background-color: rgba(172, 174, 177, 0.438); 
+}
+
+.input_box {
+    /* border: 0.5px solid black; */
+    background-color: whitesmoke
+ }
