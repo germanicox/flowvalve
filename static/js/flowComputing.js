@@ -423,6 +423,8 @@ $(document).ready(function() { //To run code as soon as the document is ready to
                 $('#FLMin').text(data.FLMin)
                 $('#FLMax').text(data.FLMax)
 
+                $('.toast').toast('show')  //this atribute to show messages to user 
+
         });  
         }   
     
