@@ -321,7 +321,7 @@ def valve_sizing():
 
 
     # percentage_to_plot = np.delete(PTravel, 0.0)
-    # FL_to_plot = np.delete(FL_Cv, 0.0)
+    # FL_to_plot = np.delete(FL_Cv, 0.0) n
  
 
     # Display Plot Flow Valve & procces data 
